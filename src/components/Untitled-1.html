@@ -1,0 +1,33 @@
+ window.parent.postMessage(JSON.stringify({ 'newMessage': document.getElementById("msg").value })
+
+ origin
+
+// client side
+
+<form id="form">
+    <input type="text" id="msg_ip" placeholder="Device IP"/>
+    <input id="connect_ip" type="button" value="enter local or remote device IP" />
+</form>
+
+<script>
+document.getElementById('connect_ip').addEventListener('click', function(e) {
+
+var iframe = document.createElement('iframe');
+iframe.src = document.getElementById("msg_ip").value + "/listen";
+document.body.appendChild(iframe);
+console.log('iframe.contentWindow =', iframe.contentWindow);
+
+}, false);
+
+function listener(event){
+  if(event.origin !== ORIGIN){
+    return;
+  }
+ 
+  var response   = JSON.parse(event.data),
+      newMessage = response['newMessage'];
+ 
+  document.getElementById("msg").innerHTML = "received: \""+(newMessage ? newMessage : 'nada')+"\" from: "+event.origin;
+}
+
+</script>
